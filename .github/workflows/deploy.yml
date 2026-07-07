@@ -7,6 +7,33 @@ jobs:
   working-job:
     runs-on: ubuntu-latest
 
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  VERSION: v1
+  IMAGE: 972293797085.dkr.ecr.us-west-1.amazonaws.com/flaskapp-simple-bank
+  REGION: us-west-1
+  S3_BUCKET: s3://972293797085-devops-scripts
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
     steps:
-      - name : Echo Message
-        run : echo "Application Deployed On AWS successfully ✅"
+      - uses: action/checkout@v4
+        with:
+          repository: ysanskarr7/banking-app-2-tier
+          ref: main
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::972293797085:role/github-deploy-policy
+          aws-region: ${{ env.REGION }}
+
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region ${{ env.REGION }} | \
+          docker login --username AWS --password-stdin \
+          972293797085.dkr.ecr.${{ env.REGION }}.amazonaws.com
+          echo "Login Successfull to ECR ✅"
