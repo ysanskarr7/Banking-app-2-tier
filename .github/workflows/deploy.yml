@@ -1,15 +1,12 @@
 name : Application Deploying On AWS
 
 on:
-   workflow_call:
+  workflow_call:
 
-jobs:
-  working-job:
-    runs-on: ubuntu-latest
-
+  
 permissions:
   id-token: write
-  contents: read
+  contents: read  
 
 env:
   VERSION: v1
@@ -21,7 +18,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: action/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: ysanskarr7/banking-app-2-tier
           ref: main
