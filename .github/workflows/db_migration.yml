@@ -1,4 +1,4 @@
-name: Intializing Database
+name: Initializing Database
 
 on:
   workflow_dispatch:
